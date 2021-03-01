@@ -18,18 +18,36 @@ package com.example.androiddevchallenge
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
+import com.example.androiddevchallenge.data.Database
+import com.example.androiddevchallenge.model.Cat
 import com.example.androiddevchallenge.ui.theme.MyTheme
-
+import com.example.androiddevchallenge.view.Detail
+import com.example.androiddevchallenge.view.Home
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MyTheme {
+            val darkTheme = false
+            MyTheme(darkTheme = darkTheme) {
                 MyApp()
             }
         }
@@ -40,22 +58,30 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp() {
     Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+        Scaffold {
+            val navController = rememberNavController()
+            NavHost(navController = navController, "Home") {
+                composable("Home") { Home(navController) }
+                composable("Detail/{catId}", arguments = listOf(navArgument("catId") {type = NavType.IntType})) { Detail(navController, it.arguments?.getInt("catId") ?: 0) }
+            }
+        }
     }
 }
 
-@Preview("Light Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun LightPreview() {
-    MyTheme {
-        MyApp()
-    }
-}
-
-@Preview("Dark Theme", widthDp = 360, heightDp = 640)
+//@Preview("Dark Theme", widthDp = 360, heightDp = 640)
 @Composable
 fun DarkPreview() {
     MyTheme(darkTheme = true) {
         MyApp()
+    }
+}
+
+
+
+@Preview("Image Preview")
+@Composable
+fun ImagePreview() {
+    MyTheme(darkTheme = true) {
+        Home(rememberNavController())
     }
 }
