@@ -21,6 +21,7 @@ buildscript {
 
     repositories {
         google()
+        jcenter()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.0.0-alpha08'
@@ -35,6 +36,7 @@ plugins {
 subprojects {
     repositories {
         google()
+        jcenter()
     }
 
     apply plugin: 'com.diffplug.spotless'
